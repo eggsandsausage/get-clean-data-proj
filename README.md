@@ -17,8 +17,8 @@ https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Datas
 The main functionality of this script is extracting, transforming and merging the data from the separate files. 
 
 Put the data in the ./data folder. Running the runAnalysis function from run_analysis.R will result in two files being created in ./result: 
-*./result/mean-and-std-measurements.csv - contains means and standard deviations for a number of accelerometer measurements. 
-*./result/mean-measurements.csv - contains the average accelerometer measurements grouped by subject and activity type. 
+* ./result/mean-and-std-measurements.csv - contains means and standard deviations for a number of accelerometer measurements. 
+* ./result/mean-measurements.csv - contains the average accelerometer measurements grouped by subject and activity type. 
 
 You can find more details about these files in Codebook.md
 
