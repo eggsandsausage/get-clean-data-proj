@@ -1,5 +1,6 @@
 ###Study design
 The production of the result files from the raw data is present in its entirety in the run_analysis.R script. The main points of this procedure:
+
 1. Subject id and measurement data is read from the test and training datasets.
 2. Data is read from the files containing descriptive labels for the activities and the measurements.
 3. Subject data, measurement data and labeling is merged for the separate sets (train and test)
