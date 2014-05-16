@@ -1,4 +1,4 @@
-library("reshape2")
+
 
 runAnalysis <- function() {
 
@@ -17,34 +17,34 @@ runAnalysis <- function() {
 								   colClasses="numeric")
 	activity.labels	<-	read.table("./data/UCI HAR Dataset/activity_labels.txt", 
 								   col.names=c("label.id", "label"))
+	var.labels		<-	read.table("./data/UCI HAR Dataset/features.txt")[[2]]
+
+	#names on measurements
+	names(testdata) <- var.labels
+	names(traindata) <- var.labels
 
 	#create the a version of the test set with subjectid, activity, mean and std.dev
 	testtypes$activity <- activity.labels[testtypes$activity, "label"]
 	testdataset <- cbind(subject.id = testsubjects$subject.id,
-					 testtypes,
-					 mean = apply(testdata, 1, mean),
-					 st.dev = apply(testdata, 1, sd))
+						 testtypes,
+						 testdata)
 	
 	#create the a version of the training set with subjectid, activity, mean and std.dev
 	traintypes$activity <- activity.labels[traintypes$activity, "label"]
 	traindataset <- cbind(subject.id = trainsubjects$subject.id,
 					 traintypes,
-					 mean = apply(traindata, 1, mean),
-					 st.dev = apply(traindata, 1, sd))
+					 traindata)
 
 	#merge the two data sets to create the first full data set
 	dataset.1 <- rbind(testdataset, traindataset)
 
+	#create specified tables
+	dataset.mean.std <- dataset.1[,c(1, 2, grep("(mean|std)\\(\\)", names(dataset.1)))]
+	dataset.aggregated <- aggregate(dataset.1[,c(-1,-2)], list(dataset.1$subject.id, dataset.1$activity), mean)
+
 	#create the second data set - same as before but now grouping on activity
-	#recast weird measurements
-	#melt on apropriate aggfuns
-	testdataset.2 <- cbind(testsubjects, testtypes, testdata)
-	traindataset.2 <- cbind(trainsubjects, traintypes, traindata)
-	dataset.2 <- rbind(testdataset.2, traindataset.2)
-	measure.vars <- names(dataset.2[,c(-1,-2)])
-	meltset <- melt(dataset.2, id = c("subject.id", "activity"), measure.vars=measure.vars)
-	ddply(meltset, .(subject.id, activity), summarize, mean = mean(value))
-	
+	write.table(dataset.mean.std, "./result/mean-and-std-measurements.csv", row.names=F, sep=",")
+	write.table(dataset.aggregated, "./result/mean-measurements.csv", row.names=F, sep=",")
 
 }
 
